@@ -23,10 +23,41 @@ namespace Kutspel
 
         public void Turn()
         {
-            DrawCards();
-            PrintStacks();
+            if (deck.Count == 0)
+            {
+                var won = true;
+                foreach(var s in stacks)
+                {
+                    if(s.Count > 1)
+                    {
+                        won = false;
+                        break;
+                    }
+                    var c = s.GetLast();
+                    if (c?.value != Value.Ace)
+                    {
+                        won = false;
+                        break;
+                    }
+                }
 
-            GetInput();
+                PrintStacks();
+                Console.WriteLine();
+                if (!won)
+                    Console.WriteLine("Game over!");
+                else
+                    Console.WriteLine("Hey gefeliciteerd pik");
+                Console.ReadKey();
+                Init();
+                Turn();
+            }
+            else
+            {
+                DrawCards();
+                PrintStacks();
+
+                GetInput();
+            }
         }
 
         public void CheckTurn()
@@ -207,8 +238,6 @@ namespace Kutspel
         public void PrintStacks(bool showControls = true, string error = "")
         {
             Console.Clear();
-            Console.WriteLine("Current situation: ");
-            Console.WriteLine();
 
             Console.WriteLine("  1       2       3       4      Cards left: " + deck.Count);
             Console.WriteLine(" ___     ___     ___     ___");
